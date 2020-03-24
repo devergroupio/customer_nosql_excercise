@@ -9,12 +9,10 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
       - ./scripts:/scripts
-    command:
-      - ./scripts/mongoseed.sh
     ports:
       - "27017:27017"
   mongo-express:
-    image: leafney/alpine-mongo-tools
+    image: mongo-express
     restart: always
     ports:
       - 8081:8081

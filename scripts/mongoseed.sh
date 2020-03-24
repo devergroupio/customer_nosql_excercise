@@ -1,1 +1,1 @@
-mongoimport --host mongo-express --port 8081 --username root --password root --authenticationDatabase admin --db NoSQL --collection delete_me --type json --file data.json --jsonArray
+mongoimport --host mongo --port 27017 --username root --password root --authenticationDatabase=admin --db NoSQL --type json --file scripts/data.json --jsonArray
