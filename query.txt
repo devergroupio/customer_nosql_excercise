@@ -61,3 +61,31 @@ db.eurusd.find(
 db.eurusd.remove(
    { "GEO" : "USA" }
 )
+
+11.Consistent
+Have a customer document
+Want to set the LastOrderValue and return the previous value
+db.customers.findAndModify({ query: { _id: 16, rev: 45 }, update: { $set: { lastOrderValue: 699 }, $inc: { rev: 1 } }, new: false })
+
+Customer has since been updated, or doesn’t exist
+Client should replay null
+Intended version of customer successfully updated
+Original version is returned
+{ _id: 16, rev: 45, lastOrderValue: 145 }
+Useful if client has got partial information and needs the full document
+A separate Find() could introduce inconsistency
+
+Keep stats about customers
+Want to increment NumOrders and return new total
+Customer document might not be there
+Independent operation still needs protection
+db.customerStats.findAndModify({ query: { _id: 16 }, update: { $inc: { numOrders: 1, rev: 1 }, $setOnInsert: { name: “Yann” } }, new: true, upsert: true })
+
+First run, document is created
+{ _id: 16, numOrders: 1, rev: 1, name: “Yann” } • Second run, document is updated { _id: 16, numOrders: 2, rev: 2, name: “Yann” }
+
+Read more: slider 15
+https://www.slideshare.net/YannCluchey/concurrency-patterns-with-mongo-db
+
+12. Availability
+https://severalnines.com/database-blog/how-deploy-mongodb-high-availability
