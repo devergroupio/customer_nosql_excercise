@@ -20,6 +20,3 @@ Read file: consistency_and_avaiablility.txt
 Investigate the indexing techniques available in your NoSQL system.
 Read file: indexing.txt
 
-
-
-
