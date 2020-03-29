@@ -1,0 +1,91 @@
+1.Connect db with authentication
+ mongo --host mongo --port 27017 --username root --password root --authenticationDatabase=admin
+
+2. View all database: show dbs
+
+3. Use database: use woption
+
+4.Insert collection eurusd
+db.eurusd.insert(
+    {
+        "REF_DATE": 1982,
+        "GEO": "USA",
+        "DGUID": "2016A000011124",
+        "Sex": "Both sexes",
+        "Landing age group": "Total, landing age group",
+        "Immigrant admission category": "Total, immigrant admission category",
+        "Period of immigration": "Total, period of immigration",
+        "Family status": "Total, family status",
+        "Income type": "Wages, salaries and commissions",
+        "Statistics": "Total count",
+        "UOM": "Persons",
+        "UOM_ID": 249,
+        "SCALAR_FACTOR": "units",
+        "SCALAR_ID": 0,
+        "VECTOR": "v92104702",
+        "COORDINATE": "1.1.1.1.1.1.1.1",
+        "VALUE": 245790,
+        "STATUS": "",
+        "SYMBOL": "",
+        "TERMINATED": "",
+        "DECIMALS": 0
+    }
+)
+
+5.Insert new field of collection {"GEO" : "USA"} without indexing
+db.eurusd.updateMany(
+    { "GEO" : "USA" },
+    { $set: { MODIFYDATE: new Date() } }
+)
+
+6.Delete field of collection {"GEO" : "USA"} without indexing
+db.eurusd.updateMany(
+    { "GEO" : "USA" },
+    { $unset: { MODIFYDATE: "" } }
+)
+
+7.Find collection {"GEO" : "USA"} without indexing
+db.eurusd.find(
+    { "GEO" : "USA" }
+)
+
+8.Indexing collection {"GEO" : "USA"}
+db.eurusd.createIndex({ "GEO" : 1})
+
+9.try again find, new field and delete field
+db.eurusd.find(
+    { "GEO" : "USA" }
+)
+
+10.drop collection
+db.eurusd.remove(
+   { "GEO" : "USA" }
+)
+
+11.Consistent
+Have a customer document
+Want to set the LastOrderValue and return the previous value
+db.customers.findAndModify({ query: { _id: 16, rev: 45 }, update: { $set: { lastOrderValue: 699 }, $inc: { rev: 1 } }, new: false })
+
+Customer has since been updated, or doesn’t exist
+Client should replay null
+Intended version of customer successfully updated
+Original version is returned
+{ _id: 16, rev: 45, lastOrderValue: 145 }
+Useful if client has got partial information and needs the full document
+A separate Find() could introduce inconsistency
+
+Keep stats about customers
+Want to increment NumOrders and return new total
+Customer document might not be there
+Independent operation still needs protection
+db.customerStats.findAndModify({ query: { _id: 16 }, update: { $inc: { numOrders: 1, rev: 1 }, $setOnInsert: { name: “Yann” } }, new: true, upsert: true })
+
+First run, document is created
+{ _id: 16, numOrders: 1, rev: 1, name: “Yann” } • Second run, document is updated { _id: 16, numOrders: 2, rev: 2, name: “Yann” }
+
+Read more: slider 15
+https://www.slideshare.net/YannCluchey/concurrency-patterns-with-mongo-db
+
+12. Availability
+https://severalnines.com/database-blog/how-deploy-mongodb-high-availability

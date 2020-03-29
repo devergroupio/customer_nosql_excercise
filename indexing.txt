@@ -1,0 +1,17 @@
+Investigate the indexing techniques available in mongo
+Find collection {"GEO" : "USA"} without indexing
+db.eurusd.find(
+    { "GEO" : "USA" }
+)
+
+slowly research
+
+Indexing collection {"GEO" : "USA"}
+db.eurusd.createIndex({ "GEO" : 1})
+
+Try again find, new field and delete field
+db.eurusd.find(
+    { "GEO" : "USA" }
+)
+
+fast research
