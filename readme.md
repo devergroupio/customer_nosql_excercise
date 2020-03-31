@@ -19,8 +19,8 @@ then go inside mongo cli:
 
 then try 10 query in txt
 
-Investigate the balance between the consistency and availability in your NoSQL system
-Read file: consistency_and_avaiablility.txt
+Investigate the balance between the consistency and availability in mongodb system
+Read file: consistency.pdf and avaiablility.pdf
 
 Investigate the indexing techniques available in your NoSQL system.
 Read file: indexing.txt

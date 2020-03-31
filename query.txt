@@ -69,3 +69,41 @@ Client should replay null
 12. Consistent with upsert
 db.eurusd.findAndModify({ query: { "GEO": "CANADA", "REF_DATE": 1920 }, update: { $set: { isSync: 1 }, $inc: { "REF_DATE": 30 } }, new: true, upsert:true })
 It will increase the REF_DATE
+
+13.regex in mongodb
+3 steps:
+1.
+db.eurusd.insert(
+    {
+        URL: "www.abc.com/helloWorldt/..."
+    }
+)
+
+2.
+db.eurusd.createIndex({ "URL" : 1})
+
+3.
+db.eurusd.updateMany(
+  { URL: { $regex: "/helloWorldt/" } },
+  [{
+    $set: { URL: {
+      $concat: [
+        { $arrayElemAt: [ { $split: [ "$URL", "/helloWorldt/" ] }, 0 ] },
+        "/helloWorld/",
+        { $arrayElemAt: [ { $split: [ "$URL", "/helloWorldt/" ] }, 1 ] }
+      ]
+    }}
+  }]
+)
+
+
+14. find explain
+db.eurusd.find(
+    { "URL" : "www.abc.com/helloWorld/..." }
+).explain('executionStats')
+
+15.get indexs
+db.eurusd.getIndexes()
+
+16. remove index
+db.eurusd.dropIndex( "GEO_1" )
